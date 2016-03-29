@@ -347,6 +347,7 @@ $(document).ready(function(){
 
 		// 画面出力
 		$('#result').html(output).trigger("create");
+		//$("#output").css("fontSize","14px"); 
 	}
 });
 
