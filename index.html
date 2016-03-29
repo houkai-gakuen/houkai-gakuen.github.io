@@ -4,6 +4,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 	<link rel="stylesheet" type="text/css" href="main.css">
 	<script language="JavaScript" type="text/javascript" src="houkai_script/jquery-1.12.2.min.js"></script>
 	<script language="JavaScript" type="text/javascript" src="houkai_script/houkai.js"></script>
@@ -29,16 +30,17 @@
 
 	<h3>装備シミュレータ</h3>
 	<div id="inputItem">
-		<p><span class="label">武器攻撃力&nbsp;</span><input type="text" name="textBoxAttack" value="2000" maxlength="6"></p>
-		<p><span class="label">クリ率(%)&nbsp;</span><input type="text" name="textBoxCritical" value="3" maxlength="3"></p>
-		<p><span class="label">移動速度(%)&nbsp;</span><input type="text" name="textBoxSpeed" value="100" maxlength="3"></p>
-		<p><span class="label">勲章１&nbsp;</span><select id="medalSelect1"><option value="0">なし</option></select></p>
-		<p><span class="label">勲章２&nbsp;</span><select id="medalSelect2"><option value="0">なし</option></select></p>
-		<p><span class="label">勲章３&nbsp;</span><select id="medalSelect3"><option value="0">なし</option></select></p>
+	<table>
+	<tr><td>武器攻撃力</td><td><input type="text" name="textBoxAttack" value="2000" maxlength="6"></td></tr>
+	<tr><td>クリ率(%)</td><td><input type="text" name="textBoxCritical" value="3" maxlength="3"></td></tr>
+	<tr><td>移動速度(%)</td><td><input type="text" name="textBoxSpeed" value="100" maxlength="3"></td></tr>
+	<tr><td>勲章１</td><td><select id="medalSelect1"><option value="0">なし</option></select></td></tr>
+	<tr><td>勲章２</td><td><select id="medalSelect2"><option value="0">なし</option></select></td></tr>
+	<tr><td>勲章３</td><td><select id="medalSelect3"><option value="0">なし</option></select></td></tr>
+	</table>
 	</div>
 	<div id="loading"><img src="images/loading.gif" /></div>
-	<div id="output"><h4>計算結果</h4><p id="result">nowloading</p><h4>装備の詳細</h4><p id="equip_info">.</p></div>
-
+	<div id="output"><h4>計算結果</h4><p id="result">nowloading</p><h4>装備の詳細</h4><p id="equip_info"></p></div>
 	<h3>更新履歴</h3>
 
 <p>

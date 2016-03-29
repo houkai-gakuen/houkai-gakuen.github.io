@@ -20,6 +20,7 @@ time, mark, audio, video {
   border: 0;
   font: inherit;
   vertical-align: baseline;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -46,6 +47,7 @@ body {
 	font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "Meiryo", "メイリオ", "Osaka", "MS PGothic", arial, helvetica, sans-serif;
 	font-size: 14px;
 	line-height: 1.5;
+	-webkit-text-size-adjust: 100%;
 }
 .outer {
   width: 100%;

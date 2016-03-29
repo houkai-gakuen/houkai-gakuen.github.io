@@ -57,12 +57,12 @@ $(document).ready(function(){
 		$('select').change(function(){
 			// 入力値収集
 			getSelectInfo();
-			// 装備情報表示
-			equipInfoView();
-			// 組合せ計算処理
-			main();
 			// 計算結果表示
 			$("#output").show();
+			// 組合せ計算処理
+			main();
+			// 装備情報表示
+			equipInfoView();
 		});
 	});
 
@@ -70,12 +70,12 @@ $(document).ready(function(){
 		$('input').on("keyup",function(){
 			// 入力値収集
 			getSelectInfo();
-			// 装備情報表示
-			equipInfoView();
-			// 組合せ計算処理
-			main();
 			// 計算結果表示
 			$("#output").show();
+			// 組合せ計算処理
+			main();
+			// 装備情報表示
+			equipInfoView();
 		});
 	});
 	// ----------------------
@@ -94,11 +94,11 @@ $(document).ready(function(){
 				$('#medalSelect3').append(text);
 		});
 		// 入力フォームの整列
-		var max = 0;
-		$("span.label").each(function(){
-			if ($(this).width() > max) max = $(this).width();
-		});
-		$("span.label").width(max).css({"float":"left", "clear":"both", "padding":"0px 0px 0px 0px"});
+		//var max = 0;
+		//$("span.label").each(function(){
+		//	if ($(this).width() > max) max = $(this).width();
+		//});
+		//$("span.label").width(max).css({"float":"left", "clear":"both", "padding":"0px 0px 0px 0px"});
 	}
 	// ----------------------
 	// 入力値収集
@@ -347,7 +347,6 @@ $(document).ready(function(){
 
 		// 画面出力
 		$('#result').html(output).trigger("create");
-
 	}
 });
 
