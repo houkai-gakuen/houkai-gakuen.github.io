@@ -41,11 +41,11 @@ $(document).ready(function(){
 		m_loadFileNow++;
 		if (m_loadFileNow == m_loadFileMax) {
 			// 全ファイル読み込み完了したら
-			// セレクトボックスの初期化
-			initSelectBox();
 			// セレクトボックスを表示する
 			$("#loading").fadeOut(function() {
 				$("#inputItem").show();
+				// セレクトボックスの初期化
+				initSelectBox();
 			});
 		}
 	}
@@ -424,7 +424,7 @@ jQuery.extend({
 	csv: function(delim, quote, lined) {
 		delim = typeof delim == "string" ? new RegExp( "[" + (delim || ","   ) + "]" ) : typeof delim == "undefined" ? ","	: delim;
 		quote = typeof quote == "string" ? new RegExp("^[" + (quote || '"'   ) + "]" ) : typeof quote == "undefined" ? '"'	: quote;
-		lined = typeof lined == "string" ? new RegExp( "[" + (lined || "\r") + "]+") : typeof lined == "undefined" ? "\r" : lined;
+		lined = typeof lined == "string" ? new RegExp( "[" + (lined || "\r\n") + "]+") : typeof lined == "undefined" ? "\r\n" : lined;
 		function splitline (v) {
 			// Split the line using the delimitor
 			var arr  = v.split(delim),

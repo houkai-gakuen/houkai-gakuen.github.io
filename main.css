@@ -130,9 +130,6 @@ dl p {
   padding-left: 20px;
   font-style: italic;
 }
-#loading {
-  display: none;
-}
 #loading img {
   margin: 0;
   padding: 0;
@@ -185,10 +182,6 @@ dl p {
 	text-align: center;
 }
 
-/* ----- 入力アイテム ----- */
-#inputItem {
-	display: none;
-}
 
 /* ----- 装備情報 ----- */
 #output {
