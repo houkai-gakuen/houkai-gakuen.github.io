@@ -24,12 +24,11 @@ $(document).ready(function(){
 	// 読み込みファイル数
 	var m_loadFileMax = 2;
 	var m_loadFileNow = 0;
-
 	
 	// ----------------------
 	// CSVの読み込み
 	// ----------------------
-	$("#loading").show();
+	$("#inputItem").hide();
 	$.get('houkai_script/medal_list.csv',function(data){
 		m_medalList = $.csv()(data);
 		addLoadFile();

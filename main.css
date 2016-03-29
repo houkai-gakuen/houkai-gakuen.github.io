@@ -43,7 +43,7 @@ body {
 	box-sizing: border-box;
 	color:#373737;
 	background: #f2f2f2;
-	font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "Meiryo", "メイリオ", "Osaka", "MS PGothic", arial, helvetica, sans-serif;
+	font-family: "Hiragino Kaku Gothic Pro", "繝偵Λ繧ｮ繝手ｧ偵ざ Pro W3", "Meiryo", "繝｡繧､繝ｪ繧ｪ", "Osaka", "MS PGothic", arial, helvetica, sans-serif;
 	font-size: 14px;
 	line-height: 1.5;
 }
@@ -157,7 +157,7 @@ dl p {
   border-bottom-right-radius: 8px;
 }
 
-/* ----- ヘッダー ----- */
+/* ----- 繝倥ャ繝繝ｼ ----- */
 #header_wrap {
 	background-image: url(images/bg_head.png);
 	background-repeat: repeat;
@@ -180,17 +180,17 @@ dl p {
 	height: 80px;
 }
 
-/* ----- フッター ----- */
+/* ----- 繝輔ャ繧ｿ繝ｼ ----- */
 #footer_wrap .inner {
 	text-align: center;
 }
 
-/* ----- 入力アイテム ----- */
+/* ----- 蜈･蜉帙い繧､繝�繝 ----- */
 #inputItem {
 	display: none;
 }
 
-/* ----- 装備情報 ----- */
+/* ----- 陬�蛯呎ュ蝣ｱ ----- */
 #output {
 	display: none;
 	padding: 0px 0 0 40px;
