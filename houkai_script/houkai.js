@@ -29,6 +29,7 @@ $(document).ready(function(){
 	// CSVの読み込み
 	// ----------------------
 	$("#inputItem").hide();
+	$("#output").hide();
 	$.get('houkai_script/medal_list.csv',function(data){
 		m_medalList = $.csv()(data);
 		addLoadFile();
@@ -124,7 +125,8 @@ $(document).ready(function(){
 		// 勲章３
 		output += getEquipInfoString(m_medal3);
 		// 画面出力
-		$('#equip_info').html(output);
+		$('#equip_info').html(output).trigger("create");
+
 	}
 	// ----------------------
 	// 装備情報取得
@@ -344,7 +346,8 @@ $(document).ready(function(){
 		output += "ダメージ期待値 " + Math.round(damageKitai*100)/100 + '<br>';
 
 		// 画面出力
-		$('#result').html(output);
+		$('#result').html(output).trigger("create");
+
 	}
 });
 
