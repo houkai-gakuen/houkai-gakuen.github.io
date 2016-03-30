@@ -6,12 +6,18 @@ var m_skillTypeList = [];
 
 // スキル種別NO_防御
 var SKILL_TYPE_NO_DIFFECE = 1;
+// スキル種別NO_移動速度
+var SKILL_TYPE_NO_SPEED = 2;
+// スキル種別NO_条件付き移動速度
+var SKILL_TYPE_NO_SPEED2 = 13;
 // スキル種別NO_クリ率
 var SKILL_TYPE_NO_CRITICAL = 3;
 // スキル種別NO_追加ダメージ
 var SKILL_TYPE_NO_TUIKA_DAMAGE = 9;
 // スキル種別NO_移動速度攻撃
 var SKILL_TYPE_NO_SPEED_DAMAGE = 12;
+// スキル種別NO_戦神傲慢
+var SKILL_TYPE_NO_IKUSA_GOMAN = 7;
 // スキル種別_なし
 var SKILL_TYPE_NONE = "NONE";
 
@@ -253,27 +259,13 @@ $(document).ready(function(){
 	function main(){
 		var output = "";
 		var addingArray = [];
-		// 初期値の100%を設定
-		addingArray[ m_medal1.getSkill1TypeNo1()] = 100;
-		addingArray[ m_medal1.getSkill1TypeNo2()] = 100;
-		addingArray[ m_medal1.getSkill2TypeNo1()] = 100;
-		addingArray[ m_medal1.getSkill2TypeNo2()] = 100;
-		addingArray[ m_medal2.getSkill1TypeNo1()] = 100;
-		addingArray[ m_medal2.getSkill1TypeNo2()] = 100;
-		addingArray[ m_medal2.getSkill2TypeNo1()] = 100;
-		addingArray[ m_medal2.getSkill2TypeNo2()] = 100;
-		addingArray[ m_medal3.getSkill1TypeNo1()] = 100;
-		addingArray[ m_medal3.getSkill1TypeNo2()] = 100;
-		addingArray[ m_medal3.getSkill2TypeNo1()] = 100;
-		addingArray[ m_medal3.getSkill2TypeNo2()] = 100;
-		// クリ率は初期値0
+		// 初期値を設定
+		// クリ率
 		addingArray[ SKILL_TYPE_NO_CRITICAL] = 0;
-		// 追加ダメは初期値0
-		if(( SKILL_TYPE_NO_TUIKA_DAMAGE in addingArray)) {
-			addingArray[ SKILL_TYPE_NO_TUIKA_DAMAGE] = 0;
-		}
-		// 移動速度攻撃は初期値0
-		addingArray[ SKILL_TYPE_NO_SPEED_DAMAGE] = 0;
+		// 移動速度
+		addingArray[SKILL_TYPE_NO_SPEED] = 0;
+		addingArray[SKILL_TYPE_NO_SPEED2] = 0;
+		addingArray[SKILL_TYPE_NO_SPEED_DAMAGE] = 0;
 		// ダメージカット
 		addingArray[SKILL_TYPE_NO_DIFFECE] = 0;
 		
@@ -285,8 +277,26 @@ $(document).ready(function(){
 				addingArray[SKILL_TYPE_NO_DIFFECE] = 100 - ((100 - addingArray[SKILL_TYPE_NO_DIFFECE]) * (1 - uniArray[uniItem][1] / 100));
 				continue;
 			}
+			// 初期化していなければ初期化してから加算
+			if(!( uniArray[uniItem][0] in addingArray)) {
+				addingArray[uniArray[uniItem][0]] = 0;
+			}
 			addingArray[uniArray[uniItem][0]] += uniArray[uniItem][1];
 		}
+		// 移動速度は加算だけなのでここで求める
+		var speed = parseFloat($('input[name=textBoxSpeed]').val()) + addingArray[SKILL_TYPE_NO_SPEED];
+		var speed2 = speed + addingArray[SKILL_TYPE_NO_SPEED2];
+		// バスクビール用 戦神傲慢とは加算になるようにする
+		if(!( SKILL_TYPE_NO_IKUSA_GOMAN in addingArray)) {
+			addingArray[ SKILL_TYPE_NO_IKUSA_GOMAN] = 0;
+		}
+		addingArray[SKILL_TYPE_NO_IKUSA_GOMAN] += (speed - 100) * (addingArray[SKILL_TYPE_NO_SPEED_DAMAGE]/100);
+
+		// クリ率は加算だけなのでここで求める
+		var criticalPercentage = addingArray[SKILL_TYPE_NO_CRITICAL] + parseFloat($('input[name=textBoxCritical]').val());
+		criticalPercentage = Math.min(criticalPercentage,100);
+		// 防御
+		var diffece = addingArray[SKILL_TYPE_NO_DIFFECE];
 
 		// 乗算分を計算
 		// 初期化
@@ -296,51 +306,43 @@ $(document).ready(function(){
 			var typeName = m_skillTypeList[key][3];
 			multiplicationArray[typeName] = 1;
 		}
-		// 武器攻撃力の設定
-		multiplicationArray["攻撃力"] = parseFloat($('input[name=textBoxAttack]').val());
-		// 移動速度の設定
-		multiplicationArray["移動速度"] = parseFloat($('input[name=textBoxSpeed]').val()) /100;
-		
 		
 		// 計算優先順位１のものだけを先に実行
 		for (key in addingArray) {
 			var typeName = m_skillTypeList[key][3];
 			var getOrderNo = m_skillTypeList[key][4];
 			if(getOrderNo != 1) continue;
-			multiplicationArray[typeName] *= (addingArray[key] / 100);
+			multiplicationArray[typeName] *= (1 + (addingArray[key] / 100));
 		}
+		// 武器攻撃力の設定
+		multiplicationArray["攻撃力"] *= parseFloat($('input[name=textBoxAttack]').val());
 		
-		var criticalPercentage = multiplicationArray["クリ率"] + $('input[name=textBoxCritical]').val() / 100;
-		criticalPercentage = Math.min(criticalPercentage,1);
-		output += "クリ率 " + Math.round(criticalPercentage * 100*100)/100 + "%、";
-		output += "移動速度 " + Math.round((multiplicationArray["移動速度"] + multiplicationArray["移動速度条件付き"] - 1)*100* 100)/100 + "%、";
-		output += "ダメージカット率 " + Math.round(multiplicationArray["防御力"]*100*100)/100 + '%<br>';
-		var damage = multiplicationArray["攻撃力"] * ((multiplicationArray["移動速度"] -1) * multiplicationArray["速度攻撃力"]+1);
+		output += "クリ率 " + Math.round(criticalPercentage*100)/100 + "%、";
+		output += "移動速度 " + Math.round(speed2*100)/100 + "%、";
+		output += "ダメージカット率 " + Math.round(diffece*100)/100 + '%<br>';
+		var damage = multiplicationArray["攻撃力"];
 		var damageCri = damage + (damage * multiplicationArray["クリ攻撃力"]);
 		
 		// 計算優先順位２以降のものを順番に実行
 		// (優先順位はクロノスの計算を正しく行うために作成、
 		// 通常の勲章は優先順位１でCSVを作成すること)
-		for (var orderNo = 2; orderNo < 10; orderNo++) {
+		for (var orderNo = 2; orderNo < 5; orderNo++) {
 			var count = 0;
 			for (key in addingArray) {
 				var typeName = m_skillTypeList[key][3];
-				var getOrderNo = m_skillTypeList[key][4];
+				var getOrderNo = parseInt(m_skillTypeList[key][4]);
 				if(getOrderNo != orderNo) continue;
 				if(typeName == "攻撃力"){
-					damage *= (addingArray[key] / 100);
-					damageCri *= (addingArray[key] / 100);
+					damage *= (1 + (addingArray[key] / 100));
+					damageCri *= (1 + (addingArray[key] / 100));
 					count ++;
 				}else if(typeName == "追加ダメ"){
 					damage += addingArray[key];
 					damageCri += addingArray[key];
-					count ++;
 				}
 			}
-			// 処理対象が無くなったら抜ける
-			if(count == 0)break;
 		}
-		var damageKitai = damage * (1-criticalPercentage) + (damageCri * criticalPercentage);
+		var damageKitai = damage * (1-criticalPercentage/100) + (damageCri * criticalPercentage/100);
 		output += "ダメージ通常時 " + Math.round(damage*100)/100 + '<br>';
 		output += "ダメージクリ時 " + Math.round(damageCri*100)/100 + '<br>';
 		output += "ダメージ期待値 " + Math.round(damageKitai*100)/100 + '<br>';
