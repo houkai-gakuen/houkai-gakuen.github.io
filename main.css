@@ -22,9 +22,11 @@ time, mark, audio, video {
   vertical-align: baseline;
   -webkit-text-size-adjust: 100%;
 }
-
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
@@ -46,7 +48,7 @@ body {
 	background: #f2f2f2;
 	font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", "Meiryo", "メイリオ", "Osaka", "MS PGothic", arial, helvetica, sans-serif;
 	font-size: 14px;
-	line-height: 1.5;
+	line-height: 1.42857;
 	-webkit-text-size-adjust: 100%;
 }
 .outer {
@@ -55,31 +57,11 @@ body {
 
 .inner {
   position: relative;
-  max-width: 640px;
   padding: 10px 10px;
   margin: 0 auto;
-}
-img {
-  position: relative;
-  margin: 0 auto;
-  max-width: 739px;
-  padding: 5px;
-  margin: 10px 0 10px 0;
-  border: 1px solid #ebebeb;
-
-  box-shadow: 0 0 5px #ebebeb;
-}
-
-p img {
-  display: inline;
-  margin: 0;
-  padding: 0;
-  vertical-align: middle;
-  text-align: center;
-  border: none;
+  width: 400px;
 }
 h3 {
-	font-size: 20px;
 	font-weight: bold;
 	position: relative;
 	padding: 0 0 0 10px;
@@ -96,7 +78,6 @@ h3::after {
 	border-bottom: 1px solid #ccc;
 }
 h4 {
-	font-size: 16px;
 	font-weight: bold;
 	padding: 0 0 0 10px;
 	margin: 6px 0 6px 0;
@@ -140,52 +121,79 @@ dl p {
   border: none;
 }
 
-/* ----- github link ----- */
-#forkme_banner {
-  display: block;
-  position: absolute;
-  top:0;
-  right: 10px;
-  z-index: 10;
-  padding: 10px 50px 10px 10px;
-  color: #fff;
-  background: url('./images/blacktocat.png') #0090ff no-repeat 95% 50%;
-  font-weight: 700;
-  box-shadow: 0 0 15px rgba(0,0,0,1);
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
 
 /* ----- ヘッダー ----- */
+#header_wrap .inner {
+	background-image: url(images/unko.png);
+	background-position: 10px top;
+	background-repeat: no-repeat;
+	height: 40px;
+}
+
 #header_wrap {
 	background-image: url(images/bg_head.png);
 	background-repeat: repeat;
 }
 #project_title{
-	font-size: 24px;
+	font-size: 18px;
 	font-weight: bold;
 	font-style: normal;
 	text-decoration: none;
 	color: #fff;
 	margin: 0px;
-	padding: 22px 0px 0px 90px;
+	padding: 0px 0px 0px 50px;
 
-}
-#header_wrap .inner {
-	background-image: url(images/unko.jpg);
-	background-position: 10px top;
-	background-repeat: no-repeat;
-	padding: 0px 10px 0px 10px;
-	height: 80px;
 }
 
 /* ----- フッター ----- */
 #footer_wrap .inner {
 	text-align: center;
+	font-size: 10px;
 }
 
+select{
+	width: 235px;
+}
+input[type="number" i]{
+    padding: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+}
+#main_content ,#header {
+}
+label {
+	cursor:pointer;
+}
 
 /* ----- 装備情報 ----- */
 #output {
-	padding: 0px 0 0 40px;
+	padding: 0px 0 0 30px;
+}
+/*----- フォーム用テーブルCSS --*/
+div #table {
+	display:table; 
+}
+div .row{
+	display:table-row;
+}
+div .row>div  {
+	display:table-cell;
+}
+#table1>div:nth-child(1) {
+	width:100px;
+}
+#table1>div:nth-child(2) {
+	width:180px;
+}
+#table2>div:nth-child(1) {
+	width:50px;
+}
+#table2>div:nth-child(2) {
+	font-size: 12px;
+	width:240px;
+}
+#table2>div:nth-child(3) {
+	font-size: 12px;
+	width:100px;
 }

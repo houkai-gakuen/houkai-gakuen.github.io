@@ -2,20 +2,59 @@
 <html lang="ja">
 
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<link rel="stylesheet" type="text/css" href="main.css">
-	<script language="JavaScript" type="text/javascript" src="houkai_script/jquery-1.12.2.min.js"></script>
-	<script language="JavaScript" type="text/javascript" src="houkai_script/houkai.js"></script>
-	<title>崩壊学園 装備シミュレータ</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<!--
+,.   .i88@@@88GG@@@01,             .,,   .,;t0@@01111i.         
+@@8Lt1f88G8@@8@@8,                            .i8@f11111.       
+CG8@@@8Lf08GG@@L,      .,,:,,:.                  ;8f11111t      
+fCC8@@0ffGCtCCL.                  ..               ,tt1111t:    
+GfC8@GL:;LffG0CC1                    ,:   ...        ..,;1tLt;i1
+iLGCCCLLLfitCGC0GL.                    ,;. ,,,,,::,.....,,,,,,;t
+,.tfG00GLLCC@@@8@0L        ;.::;,       :;i.,,,,,,,;1111t11111C.
+ iCCG08@@88Gtfi;;f: ..  i,;,,tffi..:;::,,;;i;,.,,,,,:111111,i11t
+1GGC8880G0Li:1t.       .;,,1;iiifi1tf11i;;:;i;, ,,,,,,i1.:1f.i11
+,LGG888Cti1  .1:.       ,;,,,;1iit1t1;i,,,iii1:  ,,,,,.1;  ,fi;;
+i1fLLftC;     .L:,,..   .:t,,:iiiiiii1:,,,,,:t1   ,,,:.:i   .t;:
+11t1; :ti      .Lt1,,,,:,,1G880CGGG1;;;;:,,,,,i   .,,i. i    111
+:11ii.,,,     , .1::;ii::itffLG111iiiii1tLf1i1f    :;;  :     Gt
+11i:;i ;:    .i;, 1:::,.,:;iiiitt11it008000LG80,.  ;1.  .     .G
+11;::;,;:,   :fii;;;,...           1;,CGCGG1iCL,,  ;. ,,     ;:.
+t1::::;;::; .iLiitti;i.               t11GGGii:       f.    ,88G
+G1::::;1:::i,:fiitf08800f.            .1:::::;    .  1L,   .G88G
+LL::::;1i:::iitfG8L00GL:f:              ::,.:   ,Gt tG:   ,088@G
+fL1:::;10;:::ittG,tGLCiC11                ., .:CL0:f1,  ,L88Lf@C
+ffGi::;10@i:::;it,,fi;i::;    .          ..,;,,;f:..,;L08Gt11t@f
+LtGCt;:f@@@0;::;,,. ,;;:.              .,......,G8LtL0G111111t01
+1tt1GCi1G88C08L;::,,,..                     ..,f1:;iti::::;11Lf1
+1t11GGGL1LfG1tftGC;:,....      ...  ,f01    .,t:    :i;ii,  :ft1
+1t1fGGGGGCffC0i:;:;1,......  :Gftt1i;ii,   ,:    .,.::.     tf11
+1t1CLC1CGGGGG0GG0GGGL,.....   :1ti;;i:    .L,   : .:.      11;11
+1f1Gt111CGGGGG0GGGGGGGt,....             t0Ci. 1,;, .tt. .:.,111
+fGff11111tGGGGGGGGGGGGGGGGL1;,..      .t0ttLi1ii::tif;;t;.,i1tG8
+fGG1111LGGGLiCGCCGGGGGGLCGGGGGi0880008Cttt1t,11:11fCftttf1tfC0L1
+0C01CGGLiLGGGG00@8LL1fLCGGGGGC.CtttLftttGtiL i0GCtfL:tt.fCL1tff1
+fCG0GGGGGGCCG000@@@C: ;LCGC: ;@@8C888CL0CLLLCGGGG080fffC0ffft111
+00C@008@@GLC08@@@@80CCGt.   ;C@@@8f:,:;:,:,..i;:tCGttLG0Cfftt111
+@@@@000000G00GCG08088@@@@@@@@@@1.::;i...    .:fffL;Gf;,8GGCfffff
+-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="plugin/select2.min.css">
+<link href="plugin/square/blue.css" rel="stylesheet">
+<script language="JavaScript" type="text/javascript" src="plugin/jquery-1.12.2.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="plugin/select2.full.js"></script>
+<script language="JavaScript" type="text/javascript" src="plugin/ja.js"></script>
+<script language="JavaScript" type="text/javascript" src="plugin/icheck.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="houkai_script/houkai.js"></script>
+<title>崩壊学園 装備シミュレータ</title>
 </head>
 <body>
 
 <!-- HEADER -->
 <div id="header_wrap" class="outer">
 <header class="inner">
-	<h1 id="project_title">崩壊学園 装備シミュレータ</h1>
+	<p id="project_title">崩壊学園 装備シミュレータ</p>
 </header>
 </div>
 
@@ -25,36 +64,55 @@
 
 	<h3>このサイトは？</h3>
 
-<p>「<a href="http://www.mihoyo.co.jp/">崩壊学園</a>」の非公式装備シミュレータです。<br>計算の間違いや情報の提供などありましたら以下まで連絡ください。<br>メール：houkai_gakuenアットoutlook.com</p>
+<p>「<a href="http://www.mihoyo.co.jp/">崩壊学園</a>」の非公式装備シミュレータです。<br>情報の提供などありましたら以下まで連絡ください。<br>メール：houkai_gakuenアットoutlook.com</p>
 
 	<h3>装備シミュレータ</h3>
 	<div id="inputItem">
-	<table>
-	<tr><td>武器攻撃力</td><td><input type="text" name="textBoxAttack" value="2000" maxlength="6"></td></tr>
-	<tr><td>クリ率(%)</td><td><input type="text" name="textBoxCritical" value="3" maxlength="3"></td></tr>
-	<tr><td>移動速度(%)</td><td><input type="text" name="textBoxSpeed" value="100" maxlength="3"></td></tr>
-	<tr><td>勲章１</td><td><select id="medalSelect1"><option value="0">なし</option></select></td></tr>
-	<tr><td>勲章２</td><td><select id="medalSelect2"><option value="0">なし</option></select></td></tr>
-	<tr><td>勲章３</td><td><select id="medalSelect3"><option value="0">なし</option></select></td></tr>
-	</table>
+
+<div id="table">
+	<div class="row" id="table1">
+		<div>武器攻撃力</div> 
+		<div><input type="number" name="textBoxAttack" value="2000"  step="100" min="0" max="999999"></div>
+	</div>
+	<div class="row" id="table1">
+		<div>クリ率(%)</div> 
+		<div><input type="number" name="textBoxCritical" value="3"  step="1" min="0" max="100"></div>
+	</div>
+	<div class="row" id="table1">
+		<div>移動速度(%)</div> 
+		<div><input type="number" name="textBoxSpeed" value="100" step="1" min="1" max="999"></div>
+	</div>
+</div>
+<div id="table">
+	<div class="row" id="table2">
+		<div>勲章1</div> 
+		<div><select id="medalSelect1" class="js-example-basic-single"><option value="0">なし</option></select></div>
+		<div><label id="medalSkillMaxArea1"><input type="checkbox" id="medalSkillMax1" value=""> SkillMax</label></div>
+	</div>
+	<div class="row" id="table2">
+		<div>勲章2</div> 
+		<div><select id="medalSelect2" class="js-example-basic-single"><option value="0">なし</option></select></div>
+		<div><label id="medalSkillMaxArea2"><input type="checkbox" id="medalSkillMax2" value=""> SkillMax</label></div>
+	</div>
+	<div class="row" id="table2">
+		<div>勲章3</div> 
+		<div><select id="medalSelect3" class="js-example-basic-single"><option value="0">なし</option></select></div>
+		<div><label id="medalSkillMaxArea3"><input type="checkbox" id="medalSkillMax3" value=""> SkillMax</label></div>
+	</div>
+</div>
+
 	</div>
 	<div id="loading"><img src="images/loading.gif" /></div>
 	<div id="output"><h4>計算結果</h4><p id="result">nowloading</p><h4>装備の詳細</h4><p id="equip_info"></p></div>
 	<h3>更新履歴</h3>
 
 <p>
-[2016/03/30]v1.01
+[2016/04/02]v1.02
 <ul id="ul1">
-	<li>戦神or傲慢とバスクは加算になるように修正</li>
-	<li>蛍火・真7傷の効果が追加ダメージになっていたので修正</li>
-	<li>アフロが限界等の全ダメージUP系勲章と加算になっていたので修正</li>
+	<li>一部勲章にスキルマックスで計算する設定を追加</li>
+	<li>選択ボックスで検索できる機能を追加</li>
 </ul>
-</p>
-<p>
-[2016/03/29]v1.0
-<ul id="ul1">
-	<li>初版</li>
-</ul>
+<a href="history.html">更新履歴はこちら</a>
 </p>
 
 </section>
