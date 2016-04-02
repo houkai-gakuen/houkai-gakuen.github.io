@@ -24,7 +24,10 @@ var SKILL_TYPE_NO_IKUSA_GOMAN = 7;
 var SKILL_TYPE_NONE = "NONE";
 
 $(document).ready(function(){
-
+	
+	$('#medalSelect1').val(0).trigger("change");
+	$('#medalSelect2').val(0).trigger("change");
+	$('#medalSelect3').val(0).trigger("change");
 	// 選択している勲章(0は装備無し)
 	m_medal[0] = new MedalInfo(0);
 	m_medal[1] = new MedalInfo(0);
@@ -279,12 +282,12 @@ $(document).ready(function(){
 	}
 	
 	// googleアクセス解析
-	/*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	ga('create', 'UA-75854923-1', 'auto');
-	ga('send', 'pageview');*/
+	ga('send', 'pageview');
 });
 
 // ----------------------
@@ -348,7 +351,7 @@ SkillInfo = function(selectNo,skillMaxFlag,skillNo) {
 		this.canSetSkillMax = 1 < percentageArray.length;
 		// スキルマフラグが立っている場合は括弧内の数値を設定する
 		if( this.canSetSkillMax && skillMaxFlag ){
-			this.percentage = parseFloat(percentageArray[1].replace(/[^0-9.]/g,""));
+			this.percentage = parseFloat(percentageArray[1].replace(/[^0-9.\\-]/g,""));
 		}
 		this.isSkillMax = skillMaxFlag;
 
