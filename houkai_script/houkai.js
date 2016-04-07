@@ -151,7 +151,7 @@ $(document).ready(function(){
 		var medal;
 		for(var medalNum = 0; medalNum < 3; medalNum++){
 			medal = m_medal[medalNum];
-			output += medal.getName() + '<br>';
+			output += '<h5>' + medal.getName() + '</h5>';
 			output += medal.getSkill()[0].getName();
 			output += getEquipInfoString(medal, 0);
 			output += getEquipInfoString(medal, 1);
