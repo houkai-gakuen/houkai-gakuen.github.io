@@ -14,14 +14,19 @@ var SKILL_TYPE_NO_SPEED = 2;
 var SKILL_TYPE_NO_SPEED2 = 13;
 // スキル種別NO_クリ率
 var SKILL_TYPE_NO_CRITICAL = 3;
-// スキル種別NO_追加ダメージ
-var SKILL_TYPE_NO_TUIKA_DAMAGE = 9;
 // スキル種別NO_移動速度攻撃
 var SKILL_TYPE_NO_SPEED_DAMAGE = 12;
 // スキル種別NO_戦神傲慢
 var SKILL_TYPE_NO_IKUSA_GOMAN = 7;
+// スキル種別_名称_勲章ダメージ
+var SKILL_TYPE_NAME_MEDAL_DAMAGE = "勲章ダメージ";
 // スキル種別_なし
 var SKILL_TYPE_NONE = "NONE";
+// 攻撃種別_汎用攻撃
+var ATTACK_TYPE_ALL = "全て";
+// ダメージ種別
+var DAMAGE_TYPE_NAME_WEAPON = "武器ダメージ";
+var DAMAGE_TYPE_NAME_MEDAL = "勲章ダメージ";
 
 $(document).ready(function(){
 	
@@ -169,7 +174,7 @@ $(document).ready(function(){
 		if(SKILL_TYPE_NONE != skillInfo.getTypeName()){
 			output += "：" + skillInfo.getTypeName() + skillInfo.getPercentage();
 			// 追加ダメなら%表示しない
-			if(skillInfo.getTypeNo() != SKILL_TYPE_NO_TUIKA_DAMAGE){
+			if(skillInfo.getTypeName().indexOf("ダメ") === -1){
 				output += "%";
 			}
 		}
@@ -199,27 +204,25 @@ $(document).ready(function(){
 		return uniArray;
 	}
 	// ----------------------
-	// 組合せ計算
+	// 組合せ計算_前半(長いので分割)
 	// ----------------------
 	function main(){
 		var output = "";
 		var addArray = [];
-		var dotArray = {};
-		// 初期値を設定
+
+		// 初期値を設定 0%
 		for(var i = 0; i < m_skillTypeCsv.length; i++){
-			// 0%
 			addArray[i] = 0;
-			// 1倍
-			var typeName = m_skillTypeCsv[i][3];
-			dotArray[typeName] = 1;
 		}
 		// 装備している勲章に付いてるスキルを取得
+		// （ユニークでかつ重複しているものは除外してある）
 		var uniArray = getUniArray();
 		// 同一種別のスキルタイプなら加算
 		for (var uniItem in uniArray) {
 			if ( uniArray[uniItem].getTypeNo() == SKILL_TYPE_NO_DIFFECE ){
 				// 防御は全て乗算
-				addArray[SKILL_TYPE_NO_DIFFECE] = 100 - ((100 - addArray[SKILL_TYPE_NO_DIFFECE]) * (1 - uniArray[uniItem].getPercentage() / 100));
+				addArray[SKILL_TYPE_NO_DIFFECE] =
+					100 - ((100 - addArray[SKILL_TYPE_NO_DIFFECE]) * (1 - uniArray[uniItem].getPercentage() / 100));
 				continue;
 			}
 			addArray[uniArray[uniItem].getTypeNo()] += uniArray[uniItem].getPercentage();
@@ -231,56 +234,129 @@ $(document).ready(function(){
 		addArray[SKILL_TYPE_NO_IKUSA_GOMAN] += (speed - 100) * (addArray[SKILL_TYPE_NO_SPEED_DAMAGE]/100);
 
 		// クリ率は加算だけなのでここで求める
-		var criticalPercentage = addArray[SKILL_TYPE_NO_CRITICAL] + parseFloat($('input[name=textBoxCritical]').val());
+		var criticalPercentage =
+			addArray[SKILL_TYPE_NO_CRITICAL] + parseFloat($('input[name=textBoxCritical]').val());
 		criticalPercentage = Math.min(criticalPercentage,100);
 		// 防御
 		var diffece = addArray[SKILL_TYPE_NO_DIFFECE];
 
-		// 乗算分を計算
-		// 計算優先順位１のものだけを先に実行
-		for (var key in addArray) {
-			var typeName = m_skillTypeCsv[key][3];
-			var getOrderNo = m_skillTypeCsv[key][4];
-			if(getOrderNo != 1) continue;
-			dotArray[typeName] *= (1 + (addArray[key] / 100));
-		}
-		// 武器攻撃力の設定
-		dotArray["攻撃力"] *= parseFloat($('input[name=textBoxAttack]').val());
-		
-		output += "クリ率" + Math.round(criticalPercentage*100)/100 + "%、";
-		output += "移動" + Math.round(speed2*100)/100 + "%、";
-		output += "被ダメ減少率" + Math.round(diffece*100)/100 + '%<br>';
-		var damage = dotArray["攻撃力"];
-		var damageCri = damage + (damage * dotArray["クリ攻撃力"]);
-		
-		// 計算優先順位２以降のものを順番に実行
-		// (優先順位はクロノスの計算を正しく行うために作成、
-		// 通常の勲章は優先順位１でCSVを作成すること)
-		for (var orderNo = 2; orderNo < 5; orderNo++) {
-			var count = 0;
-			for (key in addArray) {
-				var typeName = m_skillTypeCsv[key][3];
-				var getOrderNo = parseInt(m_skillTypeCsv[key][4]);
-				if(getOrderNo != orderNo) continue;
-				if(typeName == "攻撃力"){
-					damage *= (1 + (addArray[key] / 100));
-					damageCri *= (1 + (addArray[key] / 100));
-					count ++;
-				}else if(typeName == "追加ダメ"){
-					damage += addArray[key];
-					damageCri += addArray[key];
-				}
-			}
-		}
-		var damageKitai = damage * (1-criticalPercentage/100) + (damageCri * criticalPercentage/100);
-		output += "ダメージ通常時 " + Math.round(damage*100)/100 + '<br>';
-		output += "ダメージクリ時 " + Math.round(damageCri*100)/100 + '<br>';
-		output += "ダメージ期待値 " + Math.round(damageKitai*100)/100 + '<br>';
+		output += "クリ率" + Round(criticalPercentage) + "%、";
+		output += "移動" + Round(speed2) + "%、";
+		output += "被ダメ減少率" + Round(diffece) + '%<br>';
+
+		output += main2(addArray, criticalPercentage);
 
 		// 画面出力
 		$('#result').html(output).trigger("create");
 	}
-	
+	// ----------------------
+	// 組合せ計算_後半(長いので分割)
+	// ----------------------
+	function main2(addArray, criticalPercentage){
+		var output = "";
+		var dotArray = {};
+		//攻撃種別 元素攻撃や投擲など
+		var atkTypeArray = [];
+		// 攻撃種別リストを作成
+		for(var i = 0; i < m_skillTypeCsv.length; i++){
+			if(atkTypeArray.indexOf(m_skillTypeCsv[i][5]) === -1) {
+				atkTypeArray[atkTypeArray.length] = m_skillTypeCsv[i][5];
+			}
+		}
+		// ダメージ倍率の初期値を設定 1倍
+		for(var i in atkTypeArray){
+			dotArray[atkTypeArray[i]] = {};
+			dotArray[atkTypeArray[i]]["ダメ倍率"] = 1;
+			dotArray[atkTypeArray[i]]["クリダメ倍率"] = 1;
+		}
+		// 与えるダメージ
+		var damage = {};
+		var damageCri = {};
+		var attackType = {};
+		// 武器の基本攻撃力を設定
+		damage[DAMAGE_TYPE_NAME_WEAPON] = parseFloat($('input[name=textBoxAttack]').val());
+		attackType[DAMAGE_TYPE_NAME_WEAPON] = ATTACK_TYPE_ALL;
+		
+		// 計算優先順位１のものだけを先に実行
+		var medalDamageCount = 0;
+		for (var addKey in addArray) {
+			var typeName = m_skillTypeCsv[addKey][3];
+			var getOrderNo = m_skillTypeCsv[addKey][4];
+			var atkType = m_skillTypeCsv[addKey][5];
+			if(getOrderNo != 1) continue;
+			if(typeName == "ダメ倍率" || typeName == "クリダメ倍率") {
+				// 「ダメ倍率」と「クリダメ倍率」のみ乗算で計算する
+				// （クリダメ倍率の乗算は存在しないが将来用に計算しておく）
+				for(var i in atkTypeArray){
+					if(atkTypeArray[i] != ATTACK_TYPE_ALL && 
+						atkType != ATTACK_TYPE_ALL && 
+						atkTypeArray[i].indexOf(atkType) === -1) continue;
+					dotArray[atkTypeArray[i]][typeName] *= (1 + (addArray[addKey] / 100));
+				}
+			} else if (typeName == "勲章ダメージ") {
+				// 勲章ダメ1～3の設定
+				if(addArray[addKey] === 0)continue;
+				medalDamageCount++;
+				damage[DAMAGE_TYPE_NAME_MEDAL + medalDamageCount] = addArray[addKey];
+				attackType[DAMAGE_TYPE_NAME_MEDAL + medalDamageCount] = atkType;
+			}
+		}
+		// 通常ダメージ、クリティカル時のダメージの計算
+		// （クリダメUP効果は、クリティカルで上乗せされたダメージにしか効果がない）
+		for (var damageType in damage) {
+			var atkType = attackType[damageType];
+			damage[damageType] *= dotArray[atkType]["ダメ倍率"];
+			damageCri[damageType] = damage[damageType] + (damage[damageType] * dotArray[atkType]["クリダメ倍率"]);
+		}
+		// 計算優先順位２以降のものを順番に実行
+		// (優先順位はクロノスの計算を正しく行うために作成、
+		// 通常の勲章は優先順位１でCSVを作成すること)
+		for (var orderNo = 2; orderNo < 5; orderNo++) {
+			for (var addKey in addArray) {
+				var typeName = m_skillTypeCsv[addKey][3];
+				var getOrderNo = parseInt(m_skillTypeCsv[addKey][4]);
+				var atkType = m_skillTypeCsv[addKey][5];
+				if(getOrderNo != orderNo) continue;
+				if(typeName == "ダメ倍率"){
+					for (var damageType in damage) {
+						if(attackType[damageType] != ATTACK_TYPE_ALL && 
+							atkType != ATTACK_TYPE_ALL && 
+							attackType[damageType].indexOf(atkType) === -1) continue;
+						// クロノスと乗算になる物はここで計算
+						damage[damageType] *= (1 + (addArray[addKey] / 100));
+						damageCri[damageType] *= (1 + (addArray[addKey] / 100));
+					}
+				}else if(typeName == "追加ダメ"){
+					if(attackType[damageType] != ATTACK_TYPE_ALL && 
+						atkType != ATTACK_TYPE_ALL && 
+						attackType[damageType].indexOf(atkType) === -1) continue;
+					// 現状クロノス用
+					for (var damageType in damage) {
+						damage[damageType] += addArray[addKey];
+						damageCri[damageType] += addArray[addKey];
+					}
+				}
+			}
+		}
+		// ダメージ期待値を求める
+		// （通常ダメ x 否クリ確率 + クリダメ x クリ確率）
+		var damageKitai = {};
+		for (var damageType in damage) {
+			damageKitai[damageType] = damage[damageType] * (1-criticalPercentage/100) + (damageCri[damageType] * criticalPercentage/100);
+
+			output += '<h5>' + damageType + '</h5>';
+			output += '通常時：<span id="black">' + Round(damage[damageType]) + '</span><br>';
+			output += 'クリ時：<span id="red">' + Round(damageCri[damageType]) + '</span><br>';
+			output += '期待値：<span id="purple">' + Round(damageKitai[damageType]) + '</span><br>';
+		}
+		return output;
+	}
+	// ----------------------
+	// 四捨五入 小数点2位
+	// ----------------------
+	function Round(num){
+		return Math.round(num * 100) / 100;
+	}
 	// googleアクセス解析
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -292,8 +368,8 @@ $(document).ready(function(){
 
 // ----------------------
 // 勲章情報クラス
-// selectNo:選択した勲章番号
-// skillMaxFlag:スキルマフラグ
+//  selectNo:選択した勲章番号
+//  skillMaxFlag:スキルマフラグ
 // ----------------------
 MedalInfo = function(selectNo, skillMaxFlag) {
 	// 装備ID,装備名,スキル情報,スキルマ設定可能フラグ
@@ -329,7 +405,7 @@ MedalInfo.prototype.getCanSetSkillMax = function() {return this.canSetSkillMax;}
 //   skillNo:勲章内のスキル番号
 // ----------------------
 SkillInfo = function(selectNo,skillMaxFlag,skillNo) {
-	//スキル名,スキル百分率,スキル種別,スキル種別名,計算順,ユニーク用hashkey,スキルマ設定可能フラグ,スキルマフラグ
+	//スキル名,スキル百分率,スキル種別,スキル種別名,計算順,ユニーク用hashkey,スキルマ設定可能フラグ,スキルマフラグ,攻撃種別
 	this.name = "";
 	this.percentage = 0;
 	this.typeNo = 0;
@@ -338,7 +414,8 @@ SkillInfo = function(selectNo,skillMaxFlag,skillNo) {
 	this.hashKey = "_";
 	this.canSetSkillMax = false;
 	this.isSkillMax = false;
-		
+	this.isAttackType = ATTACK_TYPE_ALL;
+
 	if (0 < selectNo) {
 		this.name = m_medalCsv[selectNo][(1 < skillNo)?7:2];
 		var celNo = skillNo * 2 + 3;
@@ -357,7 +434,8 @@ SkillInfo = function(selectNo,skillMaxFlag,skillNo) {
 
 		this.typeNo = m_medalCsv[selectNo][celNo + 1];
 		this.typeName = m_skillTypeCsv[this.typeNo][2];
-		this.order = m_skillTypeCsv[this.typeNo][3];
+		this.order = m_skillTypeCsv[this.typeNo][4];
+		this.isAttackType = m_skillTypeCsv[this.typeNo][5];
 		var uniqueFlag = (this.name.indexOf("(ユニーク)") != -1);
 		// S_(勲章ID)_(スキルNO) でキーを作成
 		// 同じ勲章なら重複する状態
@@ -376,6 +454,8 @@ SkillInfo.prototype.getOrder = function() {return this.order;};
 SkillInfo.prototype.getHashKey = function() {return this.hashKey;};
 SkillInfo.prototype.getCanSetSkillMax = function() {return this.canSetSkillMax;};
 SkillInfo.prototype.getIsSkillMax = function() {return this.isSkillMax;};
+SkillInfo.prototype.getIsAttackType = function() {return this.isAttackType;};
+
 
 // ----------------------
 // CSV取得ライブラリ
