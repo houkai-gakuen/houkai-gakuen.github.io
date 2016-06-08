@@ -60,11 +60,11 @@ $(document).ready(function(){
 	$('#medalSkillMaxArea1').hide();
 	$('#medalSkillMaxArea2').hide();
 	$('#medalSkillMaxArea3').hide();
-	$.get('houkai_script/medal_list.csv',function(data){
+	$.get('houkai_script/medal_list.csv?20160609',function(data){
 		m_medalCsv = $.csv()(data);
 		addLoadFile();
 	});
-	$.get('houkai_script/skill_type_list.csv',function(data){
+	$.get('houkai_script/skill_type_list.csv?20160609',function(data){
 		m_skillTypeCsv = $.csv()(data);
 		addLoadFile();
 	});
